@@ -105,3 +105,35 @@ def decrypt_with_4des_asymmetric(encrypted_keys, ciphertext, mac, rsa_private_ke
     # 3. Decrypt using 4DES
     plaintext = four_des_decrypt(ciphertext, four_des_keys)
     return plaintext
+
+if __name__ == "__main__":
+    # Generate RSA key pair
+    private_key_pem, public_key_pem = generate_rsa_keys()
+
+    original_message = b"Hello, this is a secret message!"
+    print("Original Message:", original_message)
+
+    # Encrypt
+    encrypted_keys, ciphertext, mac = encrypt_with_4des_asymmetric(original_message, public_key_pem)
+    print("Ciphertext (hex):", ciphertext.hex())
+
+    # Decrypt
+    try:
+        recovered_message = decrypt_with_4des_asymmetric(encrypted_keys, ciphertext, mac, private_key_pem)
+        print("Recovered Message:", recovered_message)
+        print("Decryption successful, integrity verified!\n")
+    except ValueError as e:
+        print("Integrity check failed during decryption:", str(e))
+
+    # Tamper with ciphertext
+    tampered_ciphertext = bytearray(ciphertext)
+    tampered_ciphertext[0] ^= 0xFF  # Flip some bits
+    tampered_ciphertext = bytes(tampered_ciphertext)
+
+    # Attempt to decrypt tampered data
+    print("Attempting to decrypt tampered data...")
+    try:
+        decrypt_with_4des_asymmetric(encrypted_keys, tampered_ciphertext, mac, private_key_pem)
+        print("Tampering was undetected (NOT GOOD).")
+    except ValueError as e:
+        print("Integrity check failed as expected (GOOD). Error:", str(e))
