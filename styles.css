@@ -1,0 +1,52 @@
+/* Basic styling */
+
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f4f4f4;
+  }
+  
+  .container {
+    background: #ffffff;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 30px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  textarea {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    resize: vertical;
+    font-family: inherit;
+  }
+  
+  button {
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+  
