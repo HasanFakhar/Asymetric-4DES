@@ -76,3 +76,32 @@ def unwrap_keys_with_rsa(encrypted_blob, rsa_private_key_pem):
     four_des_keys = [combined[i*8:(i+1)*8] for i in range(4)]
     hmac_key = combined[32:]  # next 32 bytes or however long you chose
     return four_des_keys, hmac_key
+
+
+def encrypt_with_4des_asymmetric(plaintext, rsa_public_key_pem):
+    # 1. Generate ephemeral keys (four DES + HMAC)
+    four_des_keys = generate_four_des_keys()
+    hmac_key = get_random_bytes(32)  # 256-bit HMAC key
+
+    # 2. Encrypt plaintext with 4DES
+    ciphertext = four_des_encrypt(plaintext, four_des_keys)
+
+    # 3. Compute HMAC over ciphertext
+    mac = compute_hmac(ciphertext, hmac_key)
+
+    # 4. Wrap the symmetric keys + HMAC key using RSA
+    encrypted_keys = wrap_keys_with_rsa(four_des_keys, hmac_key, rsa_public_key_pem)
+
+    # Return the RSA-encrypted keys, 4DES ciphertext, and the HMAC
+    return encrypted_keys, ciphertext, mac
+
+def decrypt_with_4des_asymmetric(encrypted_keys, ciphertext, mac, rsa_private_key_pem):
+    # 1. Unwrap the DES & HMAC keys with RSA
+    four_des_keys, hmac_key = unwrap_keys_with_rsa(encrypted_keys, rsa_private_key_pem)
+
+    # 2. Verify HMAC for integrity
+    verify_hmac(ciphertext, hmac_key, mac)  # Raises error if tampered
+
+    # 3. Decrypt using 4DES
+    plaintext = four_des_decrypt(ciphertext, four_des_keys)
+    return plaintext
