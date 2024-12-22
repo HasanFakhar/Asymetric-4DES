@@ -42,3 +42,14 @@ def four_des_decrypt(ciphertext, keys):
     pad_len = data[-1]
     data = data[:-pad_len]
     return data
+def compute_hmac(ciphertext, hmac_key):
+    """Compute an HMAC-SHA256 over the given ciphertext."""
+    h = HMAC.new(hmac_key, digestmod=SHA256)
+    h.update(ciphertext)
+    return h.digest()
+
+def verify_hmac(ciphertext, hmac_key, expected_hmac):
+    """Verify the HMAC. Raises ValueError if verification fails."""
+    h = HMAC.new(hmac_key, digestmod=SHA256)
+    h.update(ciphertext)
+    h.verify(expected_hmac)  # Will raise ValueError on mismatch
