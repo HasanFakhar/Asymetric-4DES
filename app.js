@@ -64,19 +64,12 @@ tamperBtn.addEventListener('click', () => {
     return;
   }
 
-  // Example tampering: Change the first character's ASCII code
-  // or slice off a small chunk - anything that modifies the string.
-  // Here we just flip some bits in the first 4 characters.
-
-  // Convert from base64 string to a Uint8Array of bytes
-  // (assuming your ciphertext is base64-encoded)
   let rawBytes = atob(currentCiphertext); 
 
-  // Convert from string to an array of char codes
+
   let charArray = rawBytes.split('').map(c => c.charCodeAt(0));
 
-  // Flip bits in the first byte for demonstration
-  // For example, XOR it with 0xFF
+
   if (charArray.length > 0) {
     charArray[0] = charArray[0] ^ 0xFF; 
   }
