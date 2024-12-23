@@ -3,6 +3,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Hash import HMAC, SHA256
 
+
 def generate_rsa_keys(key_size=2048):
     """Generate an RSA key pair."""
     key = RSA.generate(key_size)
